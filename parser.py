@@ -31,11 +31,11 @@ def t_LBRACK(t):
 def t_RBRACK(t):
     r'\]'
     return t
-def t_COLON(t):
-    r':'
-    return t
 def t_ASSIGN(t):
     r':='
+    return t
+def t_COLON(t):
+    r':'
     return t
 def t_SEMICOLON(t):
     r';'
