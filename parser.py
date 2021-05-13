@@ -109,16 +109,16 @@ def p_stmt(p):
 
 def p_assignment(p):
     '''assignment : varref ASSIGN a_expr'''
-    if p[3].type == 'FLOAT':
+    if p[3] == 'FLOAT':
         p[0] = float(p[3])
-    elif p[3].type == 'INTEGER':
+    elif p[3] == 'INTEGER':
         p[0] = int(p[3])
 
 def p_declaration(p):
     '''declaration : datatype ID'''
-    if p[1].type == 'DT_INT':
+    if p[1] == 'DT_INT':
         p[0] = int(p[2])
-    elif p[1].type == 'DT_FLOAT':
+    elif p[1] == 'DT_FLOAT':
         p[0] = float(p[2])
 
 def p_datatype(p):
@@ -127,24 +127,20 @@ def p_datatype(p):
     p[0] = p[1]
 
 def p_a_expr(p):
-    '''a_expr : a_expr ADD a_term 
-        | a_expr SUB a_term 
-        | a_term'''
-    # ACTION: handle terms with care for typing (see grammar.y)
+    '''a_expr : a_expr a_op a_expr
+              | SUB a_expr 
+              | INTEGER
+              | FLOAT
+              | varref
+              | LITERAL_STR 
+              | LPAREN a_expr RPAREN'''
+    # ACTION: handle terms according to type (see grammar.y)
 
-def p_a_term(p):
-    '''a_term : a_term MUL a_fact 
-        | a_term DIV a_fact 
-        | a_fact'''
-    # ACTION: handle terms with care for typing (see grammar.y)
-
-def p_a_fact(p):
-    '''a_fact : varref 
-        | INTEGER 
-        | FLOAT 
-        | LPAREN a_expr RPAREN 
-        | SUB a_fact
-        | LITERAL_STR'''
+def p_a_op(p):
+    '''a_op : ADD 
+            | SUB 
+            | MUL 
+            | DIV'''
     # ACTION: load associated value (see OP_LOAD and OP_LOADCST)
 
 def p_varref(p):
