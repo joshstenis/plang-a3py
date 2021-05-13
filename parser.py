@@ -94,6 +94,18 @@ l = lex.lex()
 # Grammar rules (.y) below
 # ---------------------------------------------
 
+# Takes in 2 a_expr's and an a_op, then return result of the operation
+def getResult(op, e1, e2):
+    if op == 'MUL':
+        return e1.value * e2.value
+    elif op == 'DIV':
+        return e1.value / e2.value
+    elif op == 'ADD':
+        return e1.value + e2.value
+    elif op == 'SUB':
+        return e1.value - e2.value
+    else: return None
+
 def p_program(p):
     '''program : stmt_list SEMICOLON'''
 
@@ -132,16 +144,29 @@ def p_a_expr(p):
               | INTEGER
               | FLOAT
               | varref
-              | LITERAL_STR 
               | LPAREN a_expr RPAREN'''
     # ACTION: handle terms according to type (see grammar.y)
+    if p[1] == 'SUB':
+        p[0] = -1 * p[2]
+    elif p[1] == 'INTEGER':
+        if p[2] is None:
+            p[0] = int(p[1])
+        elif p[2] == 'a_op' and p[3] == 'FLOAT':
+            p[0] = getResult(p[2], float(p[1]),  float(p[3]))
+        else:
+            p[0] = getResult(p[2], int(p[1]),  int(p[3]))
+    elif p[1] == 'FLOAT':
+        if p[2] is None:
+            p[0] = float(p[1])
+        elif p[2] == 'a_op':
+            p[0] = getResult(p[2], float(p[1]),  float(p[3]))
 
 def p_a_op(p):
     '''a_op : ADD 
             | SUB 
             | MUL 
             | DIV'''
-    # ACTION: load associated value (see OP_LOAD and OP_LOADCST)
+    p[0] = p[1]
 
 def p_varref(p):
     '''varref : ID'''
