@@ -116,12 +116,15 @@ def p_assignment(p):
 
 def p_declaration(p):
     '''declaration : datatype ID'''
-    # ACTION: create symbol object (see symbol_create)
+    if p[1].type == 'DT_INT':
+        p[0] = int(p[2])
+    elif p[1].type == 'DT_FLOAT':
+        p[0] = float(p[2])
 
 def p_datatype(p):
     '''datatype : DT_INT 
         | DT_FLOAT'''
-    # ACTION: typecast for DT_INT and DT_FLOAT (see grammar.y)
+    p[0] = p[1]
 
 def p_a_expr(p):
     '''a_expr : a_expr ADD a_term 
@@ -167,7 +170,7 @@ def p_expr_list(p):
     # ACTION: stack manipulation, not sure if python needs this (see grammar.y)
 
 def p_error(p):
-    print('Parsing error: "{0}" at line {1}'.format(t, t.lexer.lineno))
+    print('Parsing error: "{0}" at line {1}'.format(p, p.lexer.lineno))
 
 import ply.yacc as yacc
 p = yacc.yacc()
