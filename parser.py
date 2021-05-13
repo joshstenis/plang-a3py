@@ -10,26 +10,66 @@ tokens = (
     'DT_INT', 'DT_FLOAT', 'FLOAT', 'INTEGER', 'ID'
 )
 
-t_LITERAL_STR = r'\".+\"'
-t_WRITE = r'write'
-t_READ = r'read'
-t_LPAREN = r'\('
-t_RPAREN = r'\)'
-t_LBRACK = r'\['
-t_RBRACK = r'\]'
-t_COLON = r':'
-t_ASSIGN = r':='
-t_SEMICOLON = r';'
-t_COMMA = r','
-t_ADD = r'\+'
-t_SUB = r'-'
-t_MUL = r'\*'
-t_DIV = r'/'
-t_DT_INT = r'int'
-t_DT_FLOAT = r'float'
-t_FLOAT = r'\d+[.]\d+'
-t_INTEGER = r'\d+'
-t_ID = r'([a-zA-Z_])\w*'
+def t_LITERAL_STR(t):
+    r'\".+\"'
+    return t
+def t_WRITE(t):
+    r'write'
+    return t
+def t_READ(t):
+    r'read'
+    return t
+def t_LPAREN(t):
+    r'\('
+    return t
+def t_RPAREN(t):
+    r'\)'
+    return t
+def t_LBRACK(t):
+    r'\['
+    return t
+def t_RBRACK(t):
+    r'\]'
+    return t
+def t_COLON(t):
+    r':'
+    return t
+def t_ASSIGN(t):
+    r':='
+    return t
+def t_SEMICOLON(t):
+    r';'
+    return t
+def t_COMMA(t):
+    r','
+    return t
+def t_ADD(t):
+    r'\+'
+    return t
+def t_SUB(t):
+    r'-'
+    return t
+def t_MUL(t):
+    r'\*'
+    return t
+def t_DIV(t):
+    r'/'
+    return t
+def t_DT_INT(t):
+    r'int'
+    return t
+def t_DT_FLOAT(t):
+    r'float'
+    return t
+def t_FLOAT(t):
+    r'\d+[.]\d+'
+    return t
+def t_INTEGER(t):
+    r'\d+'
+    return t
+def t_ID(t):
+    r'([a-zA-Z_])\w*'
+    return t
 
 t_ignore = ' \t'
 
