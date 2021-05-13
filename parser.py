@@ -94,48 +94,48 @@ l = lex.lex()
 # Grammar rules (.y) below
 # ---------------------------------------------
 
-def p_program(t):
+def p_program(p):
     '''program : stmt_list SEMICOLON'''
 
-def p_stmt_list(t):
+def p_stmt_list(p):
     '''stmt_list : stmt_list SEMICOLON stmt 
         | stmt'''
 
-def p_stmt(t):
+def p_stmt(p):
     '''stmt : assignment 
         | read 
         | write 
         | declaration'''
 
-def p_assignment(t):
+def p_assignment(p):
     '''assignment : varref ASSIGN a_expr'''
     if p[3].type == 'FLOAT':
         p[0] = float(p[3])
     elif p[3].type == 'INTEGER':
         p[0] = int(p[3])
 
-def p_declaration(t):
+def p_declaration(p):
     '''declaration : datatype ID'''
     # ACTION: create symbol object (see symbol_create)
 
-def p_datatype(t):
+def p_datatype(p):
     '''datatype : DT_INT 
         | DT_FLOAT'''
     # ACTION: typecast for DT_INT and DT_FLOAT (see grammar.y)
 
-def p_a_expr(t):
+def p_a_expr(p):
     '''a_expr : a_expr ADD a_term 
         | a_expr SUB a_term 
         | a_term'''
     # ACTION: handle terms with care for typing (see grammar.y)
 
-def p_a_term(t):
+def p_a_term(p):
     '''a_term : a_term MUL a_fact 
         | a_term DIV a_fact 
         | a_fact'''
     # ACTION: handle terms with care for typing (see grammar.y)
 
-def p_a_fact(t):
+def p_a_fact(p):
     '''a_fact : varref 
         | INTEGER 
         | FLOAT 
@@ -144,29 +144,29 @@ def p_a_fact(t):
         | LITERAL_STR'''
     # ACTION: load associated value (see OP_LOAD and OP_LOADCST)
 
-def p_varref(t):
+def p_varref(p):
     '''varref : ID'''
     # ACTION: find associated variable (see symtab.cc)
 
-def p_read(t):
+def p_read(p):
     '''read : READ varlist'''
     # ACTION: iterate through varref objects (see OP_READ)
 
-def p_write(t):
+def p_write(p):
     '''write : WRITE expr_list'''
     # ACTION: write given variable to symbol_t objects (see OP_WRITE)
 
-def p_varlist(t):
+def p_varlist(p):
     '''varlist : varlist COMMA varref 
         | varref'''
     # ACTION: stack manipulation, not sure if python needs this (see grammar.y)
 
-def p_expr_list(t):
+def p_expr_list(p):
     '''expr_list : expr_list COMMA a_expr 
         | a_expr'''
     # ACTION: stack manipulation, not sure if python needs this (see grammar.y)
 
-def p_error(t):
+def p_error(p):
     print('Parsing error: "{0}" at line {1}'.format(t, t.lexer.lineno))
 
 import ply.yacc as yacc
