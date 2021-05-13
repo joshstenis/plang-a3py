@@ -128,6 +128,9 @@ def p_assignment(p):
 
 def p_declaration(p):
     '''declaration : datatype ID'''
+    
+    # =======- CHECK ME -=======
+    
     if p[1] == 'DT_INT':
         p[0] = int(p[2])
     elif p[1] == 'DT_FLOAT':
@@ -145,7 +148,9 @@ def p_a_expr(p):
               | FLOAT
               | varref
               | LPAREN a_expr RPAREN'''
-    # ACTION: handle terms according to type (see grammar.y)
+
+    # =======- CHECK ME -=======
+
     if p[1] == 'SUB':
         p[0] = -1 * p[2]
     elif p[1] == 'INTEGER':
