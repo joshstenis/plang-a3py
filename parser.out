@@ -1,0 +1,751 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    COLON
+    COMMENT
+    LBRACK
+    RBRACK
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> stmt_list SEMICOLON
+Rule 2     stmt_list -> stmt_list SEMICOLON stmt
+Rule 3     stmt_list -> stmt
+Rule 4     stmt -> assignment
+Rule 5     stmt -> read
+Rule 6     stmt -> write
+Rule 7     stmt -> declaration
+Rule 8     assignment -> varref ASSIGN a_expr
+Rule 9     declaration -> datatype ID
+Rule 10    datatype -> DT_INT
+Rule 11    datatype -> DT_FLOAT
+Rule 12    a_expr -> a_expr ADD a_term
+Rule 13    a_expr -> a_expr SUB a_term
+Rule 14    a_expr -> a_term
+Rule 15    a_term -> a_term MUL a_fact
+Rule 16    a_term -> a_term DIV a_fact
+Rule 17    a_term -> a_fact
+Rule 18    a_fact -> varref
+Rule 19    a_fact -> INTEGER
+Rule 20    a_fact -> FLOAT
+Rule 21    a_fact -> LPAREN a_expr RPAREN
+Rule 22    a_fact -> SUB a_fact
+Rule 23    a_fact -> LITERAL_STR
+Rule 24    varref -> ID
+Rule 25    read -> READ varlist
+Rule 26    write -> WRITE expr_list
+Rule 27    varlist -> varlist COMMA varref
+Rule 28    varlist -> varref
+Rule 29    expr_list -> expr_list COMMA a_expr
+Rule 30    expr_list -> a_expr
+
+Terminals, with rules where they appear
+
+ADD                  : 12
+ASSIGN               : 8
+COLON                : 
+COMMA                : 27 29
+COMMENT              : 
+DIV                  : 16
+DT_FLOAT             : 11
+DT_INT               : 10
+FLOAT                : 20
+ID                   : 9 24
+INTEGER              : 19
+LBRACK               : 
+LITERAL_STR          : 23
+LPAREN               : 21
+MUL                  : 15
+RBRACK               : 
+READ                 : 25
+RPAREN               : 21
+SEMICOLON            : 1 2
+SUB                  : 13 22
+WRITE                : 26
+error                : 
+
+Nonterminals, with rules where they appear
+
+a_expr               : 8 12 13 21 29 30
+a_fact               : 15 16 17 22
+a_term               : 12 13 14 15 16
+assignment           : 4
+datatype             : 9
+declaration          : 7
+expr_list            : 26 29
+program              : 0
+read                 : 5
+stmt                 : 2 3
+stmt_list            : 1 2
+varlist              : 25 27
+varref               : 8 18 27 28
+write                : 6
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . stmt_list SEMICOLON
+    (2) stmt_list -> . stmt_list SEMICOLON stmt
+    (3) stmt_list -> . stmt
+    (4) stmt -> . assignment
+    (5) stmt -> . read
+    (6) stmt -> . write
+    (7) stmt -> . declaration
+    (8) assignment -> . varref ASSIGN a_expr
+    (25) read -> . READ varlist
+    (26) write -> . WRITE expr_list
+    (9) declaration -> . datatype ID
+    (24) varref -> . ID
+    (10) datatype -> . DT_INT
+    (11) datatype -> . DT_FLOAT
+
+    READ            shift and go to state 9
+    WRITE           shift and go to state 10
+    ID              shift and go to state 12
+    DT_INT          shift and go to state 13
+    DT_FLOAT        shift and go to state 14
+
+    program                        shift and go to state 1
+    stmt_list                      shift and go to state 2
+    stmt                           shift and go to state 3
+    assignment                     shift and go to state 4
+    read                           shift and go to state 5
+    write                          shift and go to state 6
+    declaration                    shift and go to state 7
+    varref                         shift and go to state 8
+    datatype                       shift and go to state 11
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> stmt_list . SEMICOLON
+    (2) stmt_list -> stmt_list . SEMICOLON stmt
+
+    SEMICOLON       shift and go to state 15
+
+
+state 3
+
+    (3) stmt_list -> stmt .
+
+    SEMICOLON       reduce using rule 3 (stmt_list -> stmt .)
+
+
+state 4
+
+    (4) stmt -> assignment .
+
+    SEMICOLON       reduce using rule 4 (stmt -> assignment .)
+
+
+state 5
+
+    (5) stmt -> read .
+
+    SEMICOLON       reduce using rule 5 (stmt -> read .)
+
+
+state 6
+
+    (6) stmt -> write .
+
+    SEMICOLON       reduce using rule 6 (stmt -> write .)
+
+
+state 7
+
+    (7) stmt -> declaration .
+
+    SEMICOLON       reduce using rule 7 (stmt -> declaration .)
+
+
+state 8
+
+    (8) assignment -> varref . ASSIGN a_expr
+
+    ASSIGN          shift and go to state 16
+
+
+state 9
+
+    (25) read -> READ . varlist
+    (27) varlist -> . varlist COMMA varref
+    (28) varlist -> . varref
+    (24) varref -> . ID
+
+    ID              shift and go to state 12
+
+    varlist                        shift and go to state 17
+    varref                         shift and go to state 18
+
+state 10
+
+    (26) write -> WRITE . expr_list
+    (29) expr_list -> . expr_list COMMA a_expr
+    (30) expr_list -> . a_expr
+    (12) a_expr -> . a_expr ADD a_term
+    (13) a_expr -> . a_expr SUB a_term
+    (14) a_expr -> . a_term
+    (15) a_term -> . a_term MUL a_fact
+    (16) a_term -> . a_term DIV a_fact
+    (17) a_term -> . a_fact
+    (18) a_fact -> . varref
+    (19) a_fact -> . INTEGER
+    (20) a_fact -> . FLOAT
+    (21) a_fact -> . LPAREN a_expr RPAREN
+    (22) a_fact -> . SUB a_fact
+    (23) a_fact -> . LITERAL_STR
+    (24) varref -> . ID
+
+    INTEGER         shift and go to state 25
+    FLOAT           shift and go to state 26
+    LPAREN          shift and go to state 27
+    SUB             shift and go to state 22
+    LITERAL_STR     shift and go to state 28
+    ID              shift and go to state 12
+
+    expr_list                      shift and go to state 19
+    a_expr                         shift and go to state 20
+    a_term                         shift and go to state 21
+    a_fact                         shift and go to state 23
+    varref                         shift and go to state 24
+
+state 11
+
+    (9) declaration -> datatype . ID
+
+    ID              shift and go to state 29
+
+
+state 12
+
+    (24) varref -> ID .
+
+    ASSIGN          reduce using rule 24 (varref -> ID .)
+    COMMA           reduce using rule 24 (varref -> ID .)
+    SEMICOLON       reduce using rule 24 (varref -> ID .)
+    MUL             reduce using rule 24 (varref -> ID .)
+    DIV             reduce using rule 24 (varref -> ID .)
+    ADD             reduce using rule 24 (varref -> ID .)
+    SUB             reduce using rule 24 (varref -> ID .)
+    RPAREN          reduce using rule 24 (varref -> ID .)
+
+
+state 13
+
+    (10) datatype -> DT_INT .
+
+    ID              reduce using rule 10 (datatype -> DT_INT .)
+
+
+state 14
+
+    (11) datatype -> DT_FLOAT .
+
+    ID              reduce using rule 11 (datatype -> DT_FLOAT .)
+
+
+state 15
+
+    (1) program -> stmt_list SEMICOLON .
+    (2) stmt_list -> stmt_list SEMICOLON . stmt
+    (4) stmt -> . assignment
+    (5) stmt -> . read
+    (6) stmt -> . write
+    (7) stmt -> . declaration
+    (8) assignment -> . varref ASSIGN a_expr
+    (25) read -> . READ varlist
+    (26) write -> . WRITE expr_list
+    (9) declaration -> . datatype ID
+    (24) varref -> . ID
+    (10) datatype -> . DT_INT
+    (11) datatype -> . DT_FLOAT
+
+    $end            reduce using rule 1 (program -> stmt_list SEMICOLON .)
+    READ            shift and go to state 9
+    WRITE           shift and go to state 10
+    ID              shift and go to state 12
+    DT_INT          shift and go to state 13
+    DT_FLOAT        shift and go to state 14
+
+    stmt                           shift and go to state 30
+    assignment                     shift and go to state 4
+    read                           shift and go to state 5
+    write                          shift and go to state 6
+    declaration                    shift and go to state 7
+    varref                         shift and go to state 8
+    datatype                       shift and go to state 11
+
+state 16
+
+    (8) assignment -> varref ASSIGN . a_expr
+    (12) a_expr -> . a_expr ADD a_term
+    (13) a_expr -> . a_expr SUB a_term
+    (14) a_expr -> . a_term
+    (15) a_term -> . a_term MUL a_fact
+    (16) a_term -> . a_term DIV a_fact
+    (17) a_term -> . a_fact
+    (18) a_fact -> . varref
+    (19) a_fact -> . INTEGER
+    (20) a_fact -> . FLOAT
+    (21) a_fact -> . LPAREN a_expr RPAREN
+    (22) a_fact -> . SUB a_fact
+    (23) a_fact -> . LITERAL_STR
+    (24) varref -> . ID
+
+    INTEGER         shift and go to state 25
+    FLOAT           shift and go to state 26
+    LPAREN          shift and go to state 27
+    SUB             shift and go to state 22
+    LITERAL_STR     shift and go to state 28
+    ID              shift and go to state 12
+
+    varref                         shift and go to state 24
+    a_expr                         shift and go to state 31
+    a_term                         shift and go to state 21
+    a_fact                         shift and go to state 23
+
+state 17
+
+    (25) read -> READ varlist .
+    (27) varlist -> varlist . COMMA varref
+
+    SEMICOLON       reduce using rule 25 (read -> READ varlist .)
+    COMMA           shift and go to state 32
+
+
+state 18
+
+    (28) varlist -> varref .
+
+    COMMA           reduce using rule 28 (varlist -> varref .)
+    SEMICOLON       reduce using rule 28 (varlist -> varref .)
+
+
+state 19
+
+    (26) write -> WRITE expr_list .
+    (29) expr_list -> expr_list . COMMA a_expr
+
+    SEMICOLON       reduce using rule 26 (write -> WRITE expr_list .)
+    COMMA           shift and go to state 33
+
+
+state 20
+
+    (30) expr_list -> a_expr .
+    (12) a_expr -> a_expr . ADD a_term
+    (13) a_expr -> a_expr . SUB a_term
+
+    COMMA           reduce using rule 30 (expr_list -> a_expr .)
+    SEMICOLON       reduce using rule 30 (expr_list -> a_expr .)
+    ADD             shift and go to state 34
+    SUB             shift and go to state 35
+
+
+state 21
+
+    (14) a_expr -> a_term .
+    (15) a_term -> a_term . MUL a_fact
+    (16) a_term -> a_term . DIV a_fact
+
+    ADD             reduce using rule 14 (a_expr -> a_term .)
+    SUB             reduce using rule 14 (a_expr -> a_term .)
+    COMMA           reduce using rule 14 (a_expr -> a_term .)
+    SEMICOLON       reduce using rule 14 (a_expr -> a_term .)
+    RPAREN          reduce using rule 14 (a_expr -> a_term .)
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+
+
+state 22
+
+    (22) a_fact -> SUB . a_fact
+    (18) a_fact -> . varref
+    (19) a_fact -> . INTEGER
+    (20) a_fact -> . FLOAT
+    (21) a_fact -> . LPAREN a_expr RPAREN
+    (22) a_fact -> . SUB a_fact
+    (23) a_fact -> . LITERAL_STR
+    (24) varref -> . ID
+
+    INTEGER         shift and go to state 25
+    FLOAT           shift and go to state 26
+    LPAREN          shift and go to state 27
+    SUB             shift and go to state 22
+    LITERAL_STR     shift and go to state 28
+    ID              shift and go to state 12
+
+    a_fact                         shift and go to state 38
+    varref                         shift and go to state 24
+
+state 23
+
+    (17) a_term -> a_fact .
+
+    MUL             reduce using rule 17 (a_term -> a_fact .)
+    DIV             reduce using rule 17 (a_term -> a_fact .)
+    ADD             reduce using rule 17 (a_term -> a_fact .)
+    SUB             reduce using rule 17 (a_term -> a_fact .)
+    COMMA           reduce using rule 17 (a_term -> a_fact .)
+    SEMICOLON       reduce using rule 17 (a_term -> a_fact .)
+    RPAREN          reduce using rule 17 (a_term -> a_fact .)
+
+
+state 24
+
+    (18) a_fact -> varref .
+
+    MUL             reduce using rule 18 (a_fact -> varref .)
+    DIV             reduce using rule 18 (a_fact -> varref .)
+    ADD             reduce using rule 18 (a_fact -> varref .)
+    SUB             reduce using rule 18 (a_fact -> varref .)
+    COMMA           reduce using rule 18 (a_fact -> varref .)
+    SEMICOLON       reduce using rule 18 (a_fact -> varref .)
+    RPAREN          reduce using rule 18 (a_fact -> varref .)
+
+
+state 25
+
+    (19) a_fact -> INTEGER .
+
+    MUL             reduce using rule 19 (a_fact -> INTEGER .)
+    DIV             reduce using rule 19 (a_fact -> INTEGER .)
+    ADD             reduce using rule 19 (a_fact -> INTEGER .)
+    SUB             reduce using rule 19 (a_fact -> INTEGER .)
+    COMMA           reduce using rule 19 (a_fact -> INTEGER .)
+    SEMICOLON       reduce using rule 19 (a_fact -> INTEGER .)
+    RPAREN          reduce using rule 19 (a_fact -> INTEGER .)
+
+
+state 26
+
+    (20) a_fact -> FLOAT .
+
+    MUL             reduce using rule 20 (a_fact -> FLOAT .)
+    DIV             reduce using rule 20 (a_fact -> FLOAT .)
+    ADD             reduce using rule 20 (a_fact -> FLOAT .)
+    SUB             reduce using rule 20 (a_fact -> FLOAT .)
+    COMMA           reduce using rule 20 (a_fact -> FLOAT .)
+    SEMICOLON       reduce using rule 20 (a_fact -> FLOAT .)
+    RPAREN          reduce using rule 20 (a_fact -> FLOAT .)
+
+
+state 27
+
+    (21) a_fact -> LPAREN . a_expr RPAREN
+    (12) a_expr -> . a_expr ADD a_term
+    (13) a_expr -> . a_expr SUB a_term
+    (14) a_expr -> . a_term
+    (15) a_term -> . a_term MUL a_fact
+    (16) a_term -> . a_term DIV a_fact
+    (17) a_term -> . a_fact
+    (18) a_fact -> . varref
+    (19) a_fact -> . INTEGER
+    (20) a_fact -> . FLOAT
+    (21) a_fact -> . LPAREN a_expr RPAREN
+    (22) a_fact -> . SUB a_fact
+    (23) a_fact -> . LITERAL_STR
+    (24) varref -> . ID
+
+    INTEGER         shift and go to state 25
+    FLOAT           shift and go to state 26
+    LPAREN          shift and go to state 27
+    SUB             shift and go to state 22
+    LITERAL_STR     shift and go to state 28
+    ID              shift and go to state 12
+
+    a_expr                         shift and go to state 39
+    a_term                         shift and go to state 21
+    a_fact                         shift and go to state 23
+    varref                         shift and go to state 24
+
+state 28
+
+    (23) a_fact -> LITERAL_STR .
+
+    MUL             reduce using rule 23 (a_fact -> LITERAL_STR .)
+    DIV             reduce using rule 23 (a_fact -> LITERAL_STR .)
+    ADD             reduce using rule 23 (a_fact -> LITERAL_STR .)
+    SUB             reduce using rule 23 (a_fact -> LITERAL_STR .)
+    COMMA           reduce using rule 23 (a_fact -> LITERAL_STR .)
+    SEMICOLON       reduce using rule 23 (a_fact -> LITERAL_STR .)
+    RPAREN          reduce using rule 23 (a_fact -> LITERAL_STR .)
+
+
+state 29
+
+    (9) declaration -> datatype ID .
+
+    SEMICOLON       reduce using rule 9 (declaration -> datatype ID .)
+
+
+state 30
+
+    (2) stmt_list -> stmt_list SEMICOLON stmt .
+
+    SEMICOLON       reduce using rule 2 (stmt_list -> stmt_list SEMICOLON stmt .)
+
+
+state 31
+
+    (8) assignment -> varref ASSIGN a_expr .
+    (12) a_expr -> a_expr . ADD a_term
+    (13) a_expr -> a_expr . SUB a_term
+
+    SEMICOLON       reduce using rule 8 (assignment -> varref ASSIGN a_expr .)
+    ADD             shift and go to state 34
+    SUB             shift and go to state 35
+
+
+state 32
+
+    (27) varlist -> varlist COMMA . varref
+    (24) varref -> . ID
+
+    ID              shift and go to state 12
+
+    varref                         shift and go to state 40
+
+state 33
+
+    (29) expr_list -> expr_list COMMA . a_expr
+    (12) a_expr -> . a_expr ADD a_term
+    (13) a_expr -> . a_expr SUB a_term
+    (14) a_expr -> . a_term
+    (15) a_term -> . a_term MUL a_fact
+    (16) a_term -> . a_term DIV a_fact
+    (17) a_term -> . a_fact
+    (18) a_fact -> . varref
+    (19) a_fact -> . INTEGER
+    (20) a_fact -> . FLOAT
+    (21) a_fact -> . LPAREN a_expr RPAREN
+    (22) a_fact -> . SUB a_fact
+    (23) a_fact -> . LITERAL_STR
+    (24) varref -> . ID
+
+    INTEGER         shift and go to state 25
+    FLOAT           shift and go to state 26
+    LPAREN          shift and go to state 27
+    SUB             shift and go to state 22
+    LITERAL_STR     shift and go to state 28
+    ID              shift and go to state 12
+
+    a_expr                         shift and go to state 41
+    a_term                         shift and go to state 21
+    a_fact                         shift and go to state 23
+    varref                         shift and go to state 24
+
+state 34
+
+    (12) a_expr -> a_expr ADD . a_term
+    (15) a_term -> . a_term MUL a_fact
+    (16) a_term -> . a_term DIV a_fact
+    (17) a_term -> . a_fact
+    (18) a_fact -> . varref
+    (19) a_fact -> . INTEGER
+    (20) a_fact -> . FLOAT
+    (21) a_fact -> . LPAREN a_expr RPAREN
+    (22) a_fact -> . SUB a_fact
+    (23) a_fact -> . LITERAL_STR
+    (24) varref -> . ID
+
+    INTEGER         shift and go to state 25
+    FLOAT           shift and go to state 26
+    LPAREN          shift and go to state 27
+    SUB             shift and go to state 22
+    LITERAL_STR     shift and go to state 28
+    ID              shift and go to state 12
+
+    a_term                         shift and go to state 42
+    a_fact                         shift and go to state 23
+    varref                         shift and go to state 24
+
+state 35
+
+    (13) a_expr -> a_expr SUB . a_term
+    (15) a_term -> . a_term MUL a_fact
+    (16) a_term -> . a_term DIV a_fact
+    (17) a_term -> . a_fact
+    (18) a_fact -> . varref
+    (19) a_fact -> . INTEGER
+    (20) a_fact -> . FLOAT
+    (21) a_fact -> . LPAREN a_expr RPAREN
+    (22) a_fact -> . SUB a_fact
+    (23) a_fact -> . LITERAL_STR
+    (24) varref -> . ID
+
+    INTEGER         shift and go to state 25
+    FLOAT           shift and go to state 26
+    LPAREN          shift and go to state 27
+    SUB             shift and go to state 22
+    LITERAL_STR     shift and go to state 28
+    ID              shift and go to state 12
+
+    a_term                         shift and go to state 43
+    a_fact                         shift and go to state 23
+    varref                         shift and go to state 24
+
+state 36
+
+    (15) a_term -> a_term MUL . a_fact
+    (18) a_fact -> . varref
+    (19) a_fact -> . INTEGER
+    (20) a_fact -> . FLOAT
+    (21) a_fact -> . LPAREN a_expr RPAREN
+    (22) a_fact -> . SUB a_fact
+    (23) a_fact -> . LITERAL_STR
+    (24) varref -> . ID
+
+    INTEGER         shift and go to state 25
+    FLOAT           shift and go to state 26
+    LPAREN          shift and go to state 27
+    SUB             shift and go to state 22
+    LITERAL_STR     shift and go to state 28
+    ID              shift and go to state 12
+
+    a_fact                         shift and go to state 44
+    varref                         shift and go to state 24
+
+state 37
+
+    (16) a_term -> a_term DIV . a_fact
+    (18) a_fact -> . varref
+    (19) a_fact -> . INTEGER
+    (20) a_fact -> . FLOAT
+    (21) a_fact -> . LPAREN a_expr RPAREN
+    (22) a_fact -> . SUB a_fact
+    (23) a_fact -> . LITERAL_STR
+    (24) varref -> . ID
+
+    INTEGER         shift and go to state 25
+    FLOAT           shift and go to state 26
+    LPAREN          shift and go to state 27
+    SUB             shift and go to state 22
+    LITERAL_STR     shift and go to state 28
+    ID              shift and go to state 12
+
+    a_fact                         shift and go to state 45
+    varref                         shift and go to state 24
+
+state 38
+
+    (22) a_fact -> SUB a_fact .
+
+    MUL             reduce using rule 22 (a_fact -> SUB a_fact .)
+    DIV             reduce using rule 22 (a_fact -> SUB a_fact .)
+    ADD             reduce using rule 22 (a_fact -> SUB a_fact .)
+    SUB             reduce using rule 22 (a_fact -> SUB a_fact .)
+    COMMA           reduce using rule 22 (a_fact -> SUB a_fact .)
+    SEMICOLON       reduce using rule 22 (a_fact -> SUB a_fact .)
+    RPAREN          reduce using rule 22 (a_fact -> SUB a_fact .)
+
+
+state 39
+
+    (21) a_fact -> LPAREN a_expr . RPAREN
+    (12) a_expr -> a_expr . ADD a_term
+    (13) a_expr -> a_expr . SUB a_term
+
+    RPAREN          shift and go to state 46
+    ADD             shift and go to state 34
+    SUB             shift and go to state 35
+
+
+state 40
+
+    (27) varlist -> varlist COMMA varref .
+
+    COMMA           reduce using rule 27 (varlist -> varlist COMMA varref .)
+    SEMICOLON       reduce using rule 27 (varlist -> varlist COMMA varref .)
+
+
+state 41
+
+    (29) expr_list -> expr_list COMMA a_expr .
+    (12) a_expr -> a_expr . ADD a_term
+    (13) a_expr -> a_expr . SUB a_term
+
+    COMMA           reduce using rule 29 (expr_list -> expr_list COMMA a_expr .)
+    SEMICOLON       reduce using rule 29 (expr_list -> expr_list COMMA a_expr .)
+    ADD             shift and go to state 34
+    SUB             shift and go to state 35
+
+
+state 42
+
+    (12) a_expr -> a_expr ADD a_term .
+    (15) a_term -> a_term . MUL a_fact
+    (16) a_term -> a_term . DIV a_fact
+
+    ADD             reduce using rule 12 (a_expr -> a_expr ADD a_term .)
+    SUB             reduce using rule 12 (a_expr -> a_expr ADD a_term .)
+    COMMA           reduce using rule 12 (a_expr -> a_expr ADD a_term .)
+    SEMICOLON       reduce using rule 12 (a_expr -> a_expr ADD a_term .)
+    RPAREN          reduce using rule 12 (a_expr -> a_expr ADD a_term .)
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+
+
+state 43
+
+    (13) a_expr -> a_expr SUB a_term .
+    (15) a_term -> a_term . MUL a_fact
+    (16) a_term -> a_term . DIV a_fact
+
+    ADD             reduce using rule 13 (a_expr -> a_expr SUB a_term .)
+    SUB             reduce using rule 13 (a_expr -> a_expr SUB a_term .)
+    COMMA           reduce using rule 13 (a_expr -> a_expr SUB a_term .)
+    SEMICOLON       reduce using rule 13 (a_expr -> a_expr SUB a_term .)
+    RPAREN          reduce using rule 13 (a_expr -> a_expr SUB a_term .)
+    MUL             shift and go to state 36
+    DIV             shift and go to state 37
+
+
+state 44
+
+    (15) a_term -> a_term MUL a_fact .
+
+    MUL             reduce using rule 15 (a_term -> a_term MUL a_fact .)
+    DIV             reduce using rule 15 (a_term -> a_term MUL a_fact .)
+    ADD             reduce using rule 15 (a_term -> a_term MUL a_fact .)
+    SUB             reduce using rule 15 (a_term -> a_term MUL a_fact .)
+    COMMA           reduce using rule 15 (a_term -> a_term MUL a_fact .)
+    SEMICOLON       reduce using rule 15 (a_term -> a_term MUL a_fact .)
+    RPAREN          reduce using rule 15 (a_term -> a_term MUL a_fact .)
+
+
+state 45
+
+    (16) a_term -> a_term DIV a_fact .
+
+    MUL             reduce using rule 16 (a_term -> a_term DIV a_fact .)
+    DIV             reduce using rule 16 (a_term -> a_term DIV a_fact .)
+    ADD             reduce using rule 16 (a_term -> a_term DIV a_fact .)
+    SUB             reduce using rule 16 (a_term -> a_term DIV a_fact .)
+    COMMA           reduce using rule 16 (a_term -> a_term DIV a_fact .)
+    SEMICOLON       reduce using rule 16 (a_term -> a_term DIV a_fact .)
+    RPAREN          reduce using rule 16 (a_term -> a_term DIV a_fact .)
+
+
+state 46
+
+    (21) a_fact -> LPAREN a_expr RPAREN .
+
+    MUL             reduce using rule 21 (a_fact -> LPAREN a_expr RPAREN .)
+    DIV             reduce using rule 21 (a_fact -> LPAREN a_expr RPAREN .)
+    ADD             reduce using rule 21 (a_fact -> LPAREN a_expr RPAREN .)
+    SUB             reduce using rule 21 (a_fact -> LPAREN a_expr RPAREN .)
+    COMMA           reduce using rule 21 (a_fact -> LPAREN a_expr RPAREN .)
+    SEMICOLON       reduce using rule 21 (a_fact -> LPAREN a_expr RPAREN .)
+    RPAREN          reduce using rule 21 (a_fact -> LPAREN a_expr RPAREN .)
+
