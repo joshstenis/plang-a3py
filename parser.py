@@ -124,7 +124,7 @@ def p_expr_list(t):
     # ACTION: stack manipulation, not sure if python needs this (see grammar.y)
 
 def p_error(t):
-    print('Parsing error: "{0}" at line {1}'.format(t.value, t.lexer.lineno))
+    print('Parsing error: "{0}" at line {1}'.format(t, t.lexer.lineno))
 
 import ply.yacc as yacc
 p = yacc.yacc()
