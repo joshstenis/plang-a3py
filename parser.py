@@ -109,7 +109,10 @@ def p_stmt(t):
 
 def p_assignment(t):
     '''assignment : varref ASSIGN a_expr'''
-    # ACTION: store value and datatype (view OP_STORE)
+    if p[3].type == 'FLOAT':
+        p[0] = float(p[3])
+    elif p[3].type == 'INTEGER':
+        p[0] = int(p[3])
 
 def p_declaration(t):
     '''declaration : datatype ID'''
