@@ -81,11 +81,6 @@ l = lex.lex()
 
 import re
 
-precedences = (
-    ('left', 'ADD', 'SUB'), 
-    ('left', 'MUL', 'DIV')
-)
-
 env = {}
 stack = []
 
@@ -103,7 +98,7 @@ def p_stmt(p):
         | declaration'''
 
 def p_assignment(p):
-    '''assignment : varref ASSIGN a_expr'''
+    '''assignment : ID ASSIGN a_expr'''
     env[p[1]] = p[3]
 
 def p_declaration(p):
@@ -119,17 +114,26 @@ def p_datatype(p):
     p[0] = p[1]
 
 def p_a_expr(p):
-    '''a_expr :  a_expr a_op a_expr
-              | LPAREN a_expr RPAREN
+    '''a_expr : a_expr a_op a_expr
+              | varref
               | INTEGER
               | FLOAT
-              | varref
+              | LPAREN a_expr RPAREN
               | SUB a_expr'''
     try:
-        if re.compile(r'\+|-|\*|/').match(p[2]): p[0] = evalExpr([p[2], p[1], p[3]])
-    except IndexError:
-        if p[1] == 'SUB': p[0] = evalExpr(['NEGATIVE', p[2]])
-        elif p[1] == 'LPAREN': p[0] = p[2]
+        if p[2] == '*':
+            p[0] = p[1] * p[3]
+        elif p[2] == '/':
+            p[0] = p[1] / p[3]
+        elif p[2] == '+':
+            p[0] = p[1] + p[3]
+        elif p[2] == '-':
+            p[0] = p[1] - p[3]
+    except:
+        if p[1] == '(':
+            p[0] = p[1]
+        elif p[1] == '-':
+            p[0] = p[2] * -1
         else: p[0] = p[1]
 
 def p_a_op(p):
@@ -141,7 +145,8 @@ def p_a_op(p):
 
 def p_varref(p):
     '''varref : ID'''
-    p[0] = p[1]
+    print(env[p[1]])
+    p[0] = env[p[1]]
 
 def p_read(p):
     '''read : READ varlist'''
