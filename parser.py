@@ -114,6 +114,22 @@ import re
 env = {}
 stack = []
 
+# Evaluates a_expr then returns result (i.e. calculator)
+def evalExpr(e):
+    if type(e) is list:
+        if e[0] == 'NEGATIVE':
+            return evalExpr(e[1]) * -1
+        elif e[0] == '*':
+            return evalExpr(e[1]) * evalExpr(e[2])
+        elif e[0] == '/':
+            return evalExpr(e[1]) / evalExpr(e[2])
+        elif e[0] == '+':
+            return evalExpr(e[1]) + evalExpr(e[2])
+        elif e[0] == '-':
+            return evalExpr(e[1]) - evalExpr(e[2])
+    else:
+        return e
+
 def p_program(p):
     '''program : stmt_list SEMICOLON'''
 
@@ -129,7 +145,7 @@ def p_stmt(p):
 
 def p_assignment(p):
     '''assignment : varref ASSIGN a_expr'''
-    env[p[1]] = p[3]
+    env[p[1]] = evalExpr(p[3])
 
 def p_declaration(p):
     '''declaration : datatype ID'''
@@ -143,17 +159,17 @@ def p_datatype(p):
         | DT_FLOAT'''
 
 def p_a_expr(p):
-    '''a_expr : a_expr a_op a_expr
-              | SUB a_expr 
+    '''a_expr :  a_expr a_op a_expr
+              | LPAREN a_expr RPAREN
               | INTEGER
               | FLOAT
               | varref
-              | LPAREN a_expr RPAREN'''
+              | SUB a_expr'''
     try:
         if re.compile(r'\+|-|\*|/').match(p[2]): p[0] = [p[2], p[1], p[3]]
     except IndexError:
         if p[1] == 'SUB': p[0] = ('NEGATIVE', p[2])
-        elif p[1] == 'LPAREN': p[0] = ['(', p[2], ')']
+        elif p[1] == 'LPAREN': p[0] = p[2]
         else: p[0] = p[1]
 
 def p_a_op(p):
