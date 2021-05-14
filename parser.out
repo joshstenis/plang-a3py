@@ -1,13 +1,5 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
-Unused terminals:
-
-    COLON
-    COMMENT
-    LBRACK
-    LITERAL_STR
-    RBRACK
-
 Grammar
 
 Rule 0     S' -> program
@@ -28,10 +20,10 @@ Rule 14    a_expr -> INTEGER
 Rule 15    a_expr -> FLOAT
 Rule 16    a_expr -> varref
 Rule 17    a_expr -> SUB a_expr
-Rule 18    a_op -> ADD
-Rule 19    a_op -> SUB
-Rule 20    a_op -> MUL
-Rule 21    a_op -> DIV
+Rule 18    a_op -> MUL
+Rule 19    a_op -> DIV
+Rule 20    a_op -> ADD
+Rule 21    a_op -> SUB
 Rule 22    varref -> ID
 Rule 23    read -> READ varlist
 Rule 24    write -> WRITE expr_list
@@ -42,26 +34,21 @@ Rule 28    expr_list -> a_expr
 
 Terminals, with rules where they appear
 
-ADD                  : 18
+ADD                  : 20
 ASSIGN               : 8
-COLON                : 
 COMMA                : 25 27
-COMMENT              : 
-DIV                  : 21
+DIV                  : 19
 DT_FLOAT             : 11
 DT_INT               : 10
 FLOAT                : 15
 ID                   : 9 22
 INTEGER              : 14
-LBRACK               : 
-LITERAL_STR          : 
 LPAREN               : 13
-MUL                  : 20
-RBRACK               : 
+MUL                  : 18
 READ                 : 23
 RPAREN               : 13
 SEMICOLON            : 1 2
-SUB                  : 17 19
+SUB                  : 17 21
 WRITE                : 24
 error                : 
 
@@ -222,10 +209,10 @@ state 12
     ASSIGN          reduce using rule 22 (varref -> ID .)
     COMMA           reduce using rule 22 (varref -> ID .)
     SEMICOLON       reduce using rule 22 (varref -> ID .)
-    ADD             reduce using rule 22 (varref -> ID .)
-    SUB             reduce using rule 22 (varref -> ID .)
     MUL             reduce using rule 22 (varref -> ID .)
     DIV             reduce using rule 22 (varref -> ID .)
+    ADD             reduce using rule 22 (varref -> ID .)
+    SUB             reduce using rule 22 (varref -> ID .)
     RPAREN          reduce using rule 22 (varref -> ID .)
 
 
@@ -324,17 +311,17 @@ state 20
 
     (28) expr_list -> a_expr .
     (12) a_expr -> a_expr . a_op a_expr
-    (18) a_op -> . ADD
-    (19) a_op -> . SUB
-    (20) a_op -> . MUL
-    (21) a_op -> . DIV
+    (18) a_op -> . MUL
+    (19) a_op -> . DIV
+    (20) a_op -> . ADD
+    (21) a_op -> . SUB
 
     COMMA           reduce using rule 28 (expr_list -> a_expr .)
     SEMICOLON       reduce using rule 28 (expr_list -> a_expr .)
-    ADD             shift and go to state 32
-    SUB             shift and go to state 33
-    MUL             shift and go to state 34
-    DIV             shift and go to state 35
+    MUL             shift and go to state 32
+    DIV             shift and go to state 33
+    ADD             shift and go to state 34
+    SUB             shift and go to state 35
 
     a_op                           shift and go to state 31
 
@@ -362,10 +349,10 @@ state 22
 
     (14) a_expr -> INTEGER .
 
-    ADD             reduce using rule 14 (a_expr -> INTEGER .)
-    SUB             reduce using rule 14 (a_expr -> INTEGER .)
     MUL             reduce using rule 14 (a_expr -> INTEGER .)
     DIV             reduce using rule 14 (a_expr -> INTEGER .)
+    ADD             reduce using rule 14 (a_expr -> INTEGER .)
+    SUB             reduce using rule 14 (a_expr -> INTEGER .)
     COMMA           reduce using rule 14 (a_expr -> INTEGER .)
     SEMICOLON       reduce using rule 14 (a_expr -> INTEGER .)
     RPAREN          reduce using rule 14 (a_expr -> INTEGER .)
@@ -375,10 +362,10 @@ state 23
 
     (15) a_expr -> FLOAT .
 
-    ADD             reduce using rule 15 (a_expr -> FLOAT .)
-    SUB             reduce using rule 15 (a_expr -> FLOAT .)
     MUL             reduce using rule 15 (a_expr -> FLOAT .)
     DIV             reduce using rule 15 (a_expr -> FLOAT .)
+    ADD             reduce using rule 15 (a_expr -> FLOAT .)
+    SUB             reduce using rule 15 (a_expr -> FLOAT .)
     COMMA           reduce using rule 15 (a_expr -> FLOAT .)
     SEMICOLON       reduce using rule 15 (a_expr -> FLOAT .)
     RPAREN          reduce using rule 15 (a_expr -> FLOAT .)
@@ -388,10 +375,10 @@ state 24
 
     (16) a_expr -> varref .
 
-    ADD             reduce using rule 16 (a_expr -> varref .)
-    SUB             reduce using rule 16 (a_expr -> varref .)
     MUL             reduce using rule 16 (a_expr -> varref .)
     DIV             reduce using rule 16 (a_expr -> varref .)
+    ADD             reduce using rule 16 (a_expr -> varref .)
+    SUB             reduce using rule 16 (a_expr -> varref .)
     COMMA           reduce using rule 16 (a_expr -> varref .)
     SEMICOLON       reduce using rule 16 (a_expr -> varref .)
     RPAREN          reduce using rule 16 (a_expr -> varref .)
@@ -435,16 +422,16 @@ state 28
 
     (8) assignment -> varref ASSIGN a_expr .
     (12) a_expr -> a_expr . a_op a_expr
-    (18) a_op -> . ADD
-    (19) a_op -> . SUB
-    (20) a_op -> . MUL
-    (21) a_op -> . DIV
+    (18) a_op -> . MUL
+    (19) a_op -> . DIV
+    (20) a_op -> . ADD
+    (21) a_op -> . SUB
 
     SEMICOLON       reduce using rule 8 (assignment -> varref ASSIGN a_expr .)
-    ADD             shift and go to state 32
-    SUB             shift and go to state 33
-    MUL             shift and go to state 34
-    DIV             shift and go to state 35
+    MUL             shift and go to state 32
+    DIV             shift and go to state 33
+    ADD             shift and go to state 34
+    SUB             shift and go to state 35
 
     a_op                           shift and go to state 31
 
@@ -499,62 +486,62 @@ state 31
 
 state 32
 
-    (18) a_op -> ADD .
+    (18) a_op -> MUL .
 
-    LPAREN          reduce using rule 18 (a_op -> ADD .)
-    INTEGER         reduce using rule 18 (a_op -> ADD .)
-    FLOAT           reduce using rule 18 (a_op -> ADD .)
-    SUB             reduce using rule 18 (a_op -> ADD .)
-    ID              reduce using rule 18 (a_op -> ADD .)
+    LPAREN          reduce using rule 18 (a_op -> MUL .)
+    INTEGER         reduce using rule 18 (a_op -> MUL .)
+    FLOAT           reduce using rule 18 (a_op -> MUL .)
+    SUB             reduce using rule 18 (a_op -> MUL .)
+    ID              reduce using rule 18 (a_op -> MUL .)
 
 
 state 33
 
-    (19) a_op -> SUB .
+    (19) a_op -> DIV .
 
-    LPAREN          reduce using rule 19 (a_op -> SUB .)
-    INTEGER         reduce using rule 19 (a_op -> SUB .)
-    FLOAT           reduce using rule 19 (a_op -> SUB .)
-    SUB             reduce using rule 19 (a_op -> SUB .)
-    ID              reduce using rule 19 (a_op -> SUB .)
+    LPAREN          reduce using rule 19 (a_op -> DIV .)
+    INTEGER         reduce using rule 19 (a_op -> DIV .)
+    FLOAT           reduce using rule 19 (a_op -> DIV .)
+    SUB             reduce using rule 19 (a_op -> DIV .)
+    ID              reduce using rule 19 (a_op -> DIV .)
 
 
 state 34
 
-    (20) a_op -> MUL .
+    (20) a_op -> ADD .
 
-    LPAREN          reduce using rule 20 (a_op -> MUL .)
-    INTEGER         reduce using rule 20 (a_op -> MUL .)
-    FLOAT           reduce using rule 20 (a_op -> MUL .)
-    SUB             reduce using rule 20 (a_op -> MUL .)
-    ID              reduce using rule 20 (a_op -> MUL .)
+    LPAREN          reduce using rule 20 (a_op -> ADD .)
+    INTEGER         reduce using rule 20 (a_op -> ADD .)
+    FLOAT           reduce using rule 20 (a_op -> ADD .)
+    SUB             reduce using rule 20 (a_op -> ADD .)
+    ID              reduce using rule 20 (a_op -> ADD .)
 
 
 state 35
 
-    (21) a_op -> DIV .
+    (21) a_op -> SUB .
 
-    LPAREN          reduce using rule 21 (a_op -> DIV .)
-    INTEGER         reduce using rule 21 (a_op -> DIV .)
-    FLOAT           reduce using rule 21 (a_op -> DIV .)
-    SUB             reduce using rule 21 (a_op -> DIV .)
-    ID              reduce using rule 21 (a_op -> DIV .)
+    LPAREN          reduce using rule 21 (a_op -> SUB .)
+    INTEGER         reduce using rule 21 (a_op -> SUB .)
+    FLOAT           reduce using rule 21 (a_op -> SUB .)
+    SUB             reduce using rule 21 (a_op -> SUB .)
+    ID              reduce using rule 21 (a_op -> SUB .)
 
 
 state 36
 
     (13) a_expr -> LPAREN a_expr . RPAREN
     (12) a_expr -> a_expr . a_op a_expr
-    (18) a_op -> . ADD
-    (19) a_op -> . SUB
-    (20) a_op -> . MUL
-    (21) a_op -> . DIV
+    (18) a_op -> . MUL
+    (19) a_op -> . DIV
+    (20) a_op -> . ADD
+    (21) a_op -> . SUB
 
     RPAREN          shift and go to state 41
-    ADD             shift and go to state 32
-    SUB             shift and go to state 33
-    MUL             shift and go to state 34
-    DIV             shift and go to state 35
+    MUL             shift and go to state 32
+    DIV             shift and go to state 33
+    ADD             shift and go to state 34
+    SUB             shift and go to state 35
 
     a_op                           shift and go to state 31
 
@@ -562,27 +549,27 @@ state 37
 
     (17) a_expr -> SUB a_expr .
     (12) a_expr -> a_expr . a_op a_expr
-    (18) a_op -> . ADD
-    (19) a_op -> . SUB
-    (20) a_op -> . MUL
-    (21) a_op -> . DIV
+    (18) a_op -> . MUL
+    (19) a_op -> . DIV
+    (20) a_op -> . ADD
+    (21) a_op -> . SUB
 
-  ! shift/reduce conflict for ADD resolved as shift
-  ! shift/reduce conflict for SUB resolved as shift
   ! shift/reduce conflict for MUL resolved as shift
   ! shift/reduce conflict for DIV resolved as shift
+  ! shift/reduce conflict for ADD resolved as shift
+  ! shift/reduce conflict for SUB resolved as shift
     COMMA           reduce using rule 17 (a_expr -> SUB a_expr .)
     SEMICOLON       reduce using rule 17 (a_expr -> SUB a_expr .)
     RPAREN          reduce using rule 17 (a_expr -> SUB a_expr .)
-    ADD             shift and go to state 32
-    SUB             shift and go to state 33
-    MUL             shift and go to state 34
-    DIV             shift and go to state 35
+    MUL             shift and go to state 32
+    DIV             shift and go to state 33
+    ADD             shift and go to state 34
+    SUB             shift and go to state 35
 
-  ! ADD             [ reduce using rule 17 (a_expr -> SUB a_expr .) ]
-  ! SUB             [ reduce using rule 17 (a_expr -> SUB a_expr .) ]
   ! MUL             [ reduce using rule 17 (a_expr -> SUB a_expr .) ]
   ! DIV             [ reduce using rule 17 (a_expr -> SUB a_expr .) ]
+  ! ADD             [ reduce using rule 17 (a_expr -> SUB a_expr .) ]
+  ! SUB             [ reduce using rule 17 (a_expr -> SUB a_expr .) ]
 
     a_op                           shift and go to state 31
 
@@ -598,17 +585,17 @@ state 39
 
     (27) expr_list -> expr_list COMMA a_expr .
     (12) a_expr -> a_expr . a_op a_expr
-    (18) a_op -> . ADD
-    (19) a_op -> . SUB
-    (20) a_op -> . MUL
-    (21) a_op -> . DIV
+    (18) a_op -> . MUL
+    (19) a_op -> . DIV
+    (20) a_op -> . ADD
+    (21) a_op -> . SUB
 
     COMMA           reduce using rule 27 (expr_list -> expr_list COMMA a_expr .)
     SEMICOLON       reduce using rule 27 (expr_list -> expr_list COMMA a_expr .)
-    ADD             shift and go to state 32
-    SUB             shift and go to state 33
-    MUL             shift and go to state 34
-    DIV             shift and go to state 35
+    MUL             shift and go to state 32
+    DIV             shift and go to state 33
+    ADD             shift and go to state 34
+    SUB             shift and go to state 35
 
     a_op                           shift and go to state 31
 
@@ -616,27 +603,27 @@ state 40
 
     (12) a_expr -> a_expr a_op a_expr .
     (12) a_expr -> a_expr . a_op a_expr
-    (18) a_op -> . ADD
-    (19) a_op -> . SUB
-    (20) a_op -> . MUL
-    (21) a_op -> . DIV
+    (18) a_op -> . MUL
+    (19) a_op -> . DIV
+    (20) a_op -> . ADD
+    (21) a_op -> . SUB
 
-  ! shift/reduce conflict for ADD resolved as shift
-  ! shift/reduce conflict for SUB resolved as shift
   ! shift/reduce conflict for MUL resolved as shift
   ! shift/reduce conflict for DIV resolved as shift
+  ! shift/reduce conflict for ADD resolved as shift
+  ! shift/reduce conflict for SUB resolved as shift
     COMMA           reduce using rule 12 (a_expr -> a_expr a_op a_expr .)
     SEMICOLON       reduce using rule 12 (a_expr -> a_expr a_op a_expr .)
     RPAREN          reduce using rule 12 (a_expr -> a_expr a_op a_expr .)
-    ADD             shift and go to state 32
-    SUB             shift and go to state 33
-    MUL             shift and go to state 34
-    DIV             shift and go to state 35
+    MUL             shift and go to state 32
+    DIV             shift and go to state 33
+    ADD             shift and go to state 34
+    SUB             shift and go to state 35
 
-  ! ADD             [ reduce using rule 12 (a_expr -> a_expr a_op a_expr .) ]
-  ! SUB             [ reduce using rule 12 (a_expr -> a_expr a_op a_expr .) ]
   ! MUL             [ reduce using rule 12 (a_expr -> a_expr a_op a_expr .) ]
   ! DIV             [ reduce using rule 12 (a_expr -> a_expr a_op a_expr .) ]
+  ! ADD             [ reduce using rule 12 (a_expr -> a_expr a_op a_expr .) ]
+  ! SUB             [ reduce using rule 12 (a_expr -> a_expr a_op a_expr .) ]
 
     a_op                           shift and go to state 31
 
@@ -644,10 +631,10 @@ state 41
 
     (13) a_expr -> LPAREN a_expr RPAREN .
 
-    ADD             reduce using rule 13 (a_expr -> LPAREN a_expr RPAREN .)
-    SUB             reduce using rule 13 (a_expr -> LPAREN a_expr RPAREN .)
     MUL             reduce using rule 13 (a_expr -> LPAREN a_expr RPAREN .)
     DIV             reduce using rule 13 (a_expr -> LPAREN a_expr RPAREN .)
+    ADD             reduce using rule 13 (a_expr -> LPAREN a_expr RPAREN .)
+    SUB             reduce using rule 13 (a_expr -> LPAREN a_expr RPAREN .)
     COMMA           reduce using rule 13 (a_expr -> LPAREN a_expr RPAREN .)
     SEMICOLON       reduce using rule 13 (a_expr -> LPAREN a_expr RPAREN .)
     RPAREN          reduce using rule 13 (a_expr -> LPAREN a_expr RPAREN .)
@@ -655,11 +642,11 @@ state 41
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for ADD in state 37 resolved as shift
-WARNING: shift/reduce conflict for SUB in state 37 resolved as shift
 WARNING: shift/reduce conflict for MUL in state 37 resolved as shift
 WARNING: shift/reduce conflict for DIV in state 37 resolved as shift
-WARNING: shift/reduce conflict for ADD in state 40 resolved as shift
-WARNING: shift/reduce conflict for SUB in state 40 resolved as shift
+WARNING: shift/reduce conflict for ADD in state 37 resolved as shift
+WARNING: shift/reduce conflict for SUB in state 37 resolved as shift
 WARNING: shift/reduce conflict for MUL in state 40 resolved as shift
 WARNING: shift/reduce conflict for DIV in state 40 resolved as shift
+WARNING: shift/reduce conflict for ADD in state 40 resolved as shift
+WARNING: shift/reduce conflict for SUB in state 40 resolved as shift

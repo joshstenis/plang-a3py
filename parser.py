@@ -5,14 +5,11 @@
 # ------------------------------------------------------------
 
 tokens = (
-    'LITERAL_STR', 'WRITE', 'READ', 'LPAREN', 'RPAREN', 'LBRACK', 'RBRACK', 'ASSIGN', 'SEMICOLON', 'COLON', 'COMMA', 'COMMENT', 
+    'WRITE', 'READ', 'LPAREN', 'RPAREN', 'ASSIGN', 'SEMICOLON', 'COMMA',  
     'ADD', 'SUB', 'MUL', 'DIV', 
     'DT_INT', 'DT_FLOAT', 'FLOAT', 'INTEGER', 'ID'
 )
 
-def t_LITERAL_STR(t):
-    r'\".+\"'
-    return t
 def t_WRITE(t):
     r'write'
     return t
@@ -25,17 +22,8 @@ def t_LPAREN(t):
 def t_RPAREN(t):
     r'\)'
     return t
-def t_LBRACK(t):
-    r'\['
-    return t
-def t_RBRACK(t):
-    r'\]'
-    return t
 def t_ASSIGN(t):
     r':='
-    return t
-def t_COLON(t):
-    r':'
     return t
 def t_SEMICOLON(t):
     r';'
@@ -80,11 +68,6 @@ def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
-# Skips commented lines
-def t_COMMENT(t):
-    r'\/\/.*$'
-    t.lexer.lineno += 1
-
 def t_error(t):
     pass
 
@@ -96,20 +79,12 @@ l = lex.lex()
 # Grammar rules (.y) below
 # ---------------------------------------------
 
-# Takes in 2 a_expr's and an a_op, then return result of the operation
-# def getResult(op, e1, e2):
-#     if op == 'MUL':
-#         return e1.value * e2.value
-#     elif op == 'DIV':
-#         return e1.value / e2.value
-#     elif op == 'ADD':
-#         return e1.value + e2.value
-#     elif op == 'SUB':
-#         return e1.value - e2.value
-#     else: return None
-
-
 import re
+
+precedences = (
+    ('left', 'ADD', 'SUB'), 
+    ('left', 'MUL', 'DIV')
+)
 
 env = {}
 stack = []
@@ -128,7 +103,29 @@ def evalExpr(e):
         elif e[0] == '-':
             return evalExpr(e[1]) - evalExpr(e[2])
     else:
-        return e
+        if type(e) is str:
+            return env[e]
+        else:
+            return e
+
+# Traverses next lists (expr_list and varlist)
+# NOTE: Specifically for READ and WRITE
+def stackReadWrite(l, op):
+    if op == 'w':
+        if type(l) is list:
+            stackReadWrite(l[0], op)
+            stackReadWrite(l[1], op)
+        else:
+            stack.append(l)
+    if op == 'r':
+        if type(l) is list:
+            stackReadWrite(l[0], op)
+            stackReadWrite(l[1], op)
+        else:
+            if l in stack:
+                print('Read \'{}\''.format(l))
+            else:
+                print('Var \'{}\' not in stack.'.format(l))
 
 def p_program(p):
     '''program : stmt_list SEMICOLON'''
@@ -145,7 +142,7 @@ def p_stmt(p):
 
 def p_assignment(p):
     '''assignment : varref ASSIGN a_expr'''
-    env[p[1]] = evalExpr(p[3])
+    env[p[1]] = p[3]
 
 def p_declaration(p):
     '''declaration : datatype ID'''
@@ -166,17 +163,17 @@ def p_a_expr(p):
               | varref
               | SUB a_expr'''
     try:
-        if re.compile(r'\+|-|\*|/').match(p[2]): p[0] = [p[2], p[1], p[3]]
+        if re.compile(r'\+|-|\*|/').match(p[2]): p[0] = evalExpr([p[2], p[1], p[3]])
     except IndexError:
-        if p[1] == 'SUB': p[0] = ('NEGATIVE', p[2])
+        if p[1] == 'SUB': p[0] = evalExpr(['NEGATIVE', p[2]])
         elif p[1] == 'LPAREN': p[0] = p[2]
         else: p[0] = p[1]
 
 def p_a_op(p):
-    '''a_op : ADD 
-            | SUB 
-            | MUL 
-            | DIV'''
+    '''a_op : MUL 
+            | DIV
+            | ADD 
+            | SUB'''
     p[0] = p[1]
 
 def p_varref(p):
@@ -185,11 +182,11 @@ def p_varref(p):
 
 def p_read(p):
     '''read : READ varlist'''
-    p[0] = [p[1], p[2]]
+    stackReadWrite(p[2], 'r')
 
 def p_write(p):
     '''write : WRITE expr_list'''
-    p[0] = [p[1], p[2]]
+    stackReadWrite(p[2], 'w')
 
 def p_varlist(p):
     '''varlist : varlist COMMA varref 
@@ -213,46 +210,6 @@ def p_error(p):
 import ply.yacc as yacc
 p = yacc.yacc()
 
-# ((('int', 'a'), ';', (':=', 'a', ('+', '1', '1'))), ';', ('write', 'a')
-
-# env = {}
-# stack = []
-# # Action code executed here
-# def action(p):
-#     global env, stack
-
-#     if type(p) is list:
-#         if p[0] == 'int':
-#             env[p[1]] = int(0)
-#             print(p)
-#         if p[0] == ':=':
-#             env[p[1]] = action(p[2])
-#             print('{0} assigned to {1}'.format(env[p[1]], p[1]))
-#         if p[0] == '*':
-#             return action(p[1]) * action(p[2])
-#         elif p[0] == '/':
-#             return action(p[1]) / action(p[2])
-#         elif p[0] == '+':
-#             return action(p[1]) + action(p[2])
-#         elif p[0] == '-':
-#             return action(p[1]) - action(p[2])
-#     else:
-#         return p
-
-
-
-
-    #     elif p[0] == 'write':
-    #     if run(p[1]) in env:
-    #         stack.insert(0, (run(p[1]), env[run(p[1])]))
-    #         return 'Wrote {} to stack'.format(env[run(p[1])])
-    #     else:
-    #         stack.insert(0, run(p[1]))
-    # elif p[0] == 'read':
-    #     if run(p[1]) in stack:
-    #         return '{}'.format(stack[run(p[1])])
-    #     else:
-    #         return 'Variable not in stack.'
 
 # ---------------------------------------------
 # Run parser
