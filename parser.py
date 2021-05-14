@@ -63,9 +63,11 @@ def t_DT_FLOAT(t):
     return t
 def t_FLOAT(t):
     r'\d+[.]\d+'
+    t.value = float(t.value)
     return t
 def t_INTEGER(t):
     r'\d+'
+    t.value = int(t.value)
     return t
 def t_ID(t):
     r'([a-zA-Z_])\w*'
@@ -111,13 +113,14 @@ import re
 
 def p_program(p):
     '''program : stmt_list SEMICOLON'''
-    print('{} ;'.format(p[1]))
+    print('\n{}'.format(p[1]))
+    # run(p[1])      # run(p[1])
 
 def p_stmt_list(p):
     '''stmt_list : stmt_list SEMICOLON stmt 
         | stmt'''
     try:
-        p[0] = (p[1], ';', p[3])
+        p[0] = [p[1], ';', p[3]]
     except IndexError:
         p[0] = p[1]
 
@@ -130,18 +133,11 @@ def p_stmt(p):
 
 def p_assignment(p):
     '''assignment : varref ASSIGN a_expr'''
-    p[0] = (':=', p[1], p[3])
+    p[0] = [':=', p[1], p[3]]
 
 def p_declaration(p):
     '''declaration : datatype ID'''
-    p[0] = (p[1], p[2])
-    
-    # =======- CHECK ME -=======
-    
-    # if p[1] == 'DT_INT':
-    #     p[0] = int(p[2])
-    # elif p[1] == 'DT_FLOAT':
-    #     p[0] = float(p[2])
+    p[0] = [p[1], p[2]]
 
 def p_datatype(p):
     '''datatype : DT_INT 
@@ -156,29 +152,11 @@ def p_a_expr(p):
               | varref
               | LPAREN a_expr RPAREN'''
     try:
-        if re.compile(r'\+|-|\*|/').match(p[2]): p[0] = (p[2], p[1], p[3])
+        if re.compile(r'\+|-|\*|/').match(p[2]): p[0] = [p[2], p[1], p[3]]
     except IndexError:
         if p[1] == 'SUB': p[0] = ('NEGATIVE', p[2])
-        elif p[1] == 'LPAREN': p[0] = ('(', p[2], ')')
+        elif p[1] == 'LPAREN': p[0] = ['(', p[2], ')']
         else: p[0] = p[1]
-    
-
-    # =======- CHECK ME -=======
-
-    # if p[1] == 'SUB':
-    #     p[0] = -1 * p[2]
-    # elif p[1] == 'INTEGER':
-    #     if p[2] is None:
-    #         p[0] = int(p[1])
-    #     elif p[2] == 'a_op' and p[3] == 'FLOAT':
-    #         p[0] = getResult(p[2], float(p[1]),  float(p[3]))
-    #     else:
-    #         p[0] = getResult(p[2], int(p[1]),  int(p[3]))
-    # elif p[1] == 'FLOAT':
-    #     if p[2] is None:
-    #         p[0] = float(p[1])
-    #     elif p[2] == 'a_op':
-    #         p[0] = getResult(p[2], float(p[1]),  float(p[3]))
 
 def p_a_op(p):
     '''a_op : ADD 
@@ -190,35 +168,30 @@ def p_a_op(p):
 def p_varref(p):
     '''varref : ID'''
     p[0] = p[1]
-    # ACTION: find associated variable (see symtab.cc)
 
 def p_read(p):
     '''read : READ varlist'''
-    p[0] = (p[1], p[2])
-    # ACTION: iterate through varref objects (see OP_READ)
+    p[0] = [p[1], p[2]]
 
 def p_write(p):
     '''write : WRITE expr_list'''
-    p[0] = (p[1], p[2])
-    # ACTION: write given variable to symbol_t objects (see OP_WRITE)
+    p[0] = [p[1], p[2]]
 
 def p_varlist(p):
     '''varlist : varlist COMMA varref 
         | varref'''
     try:
-        p[0] = (p[1], p[3])
+        p[0] = [p[1], p[3]]
     except IndexError:
         p[0] = p[1]
-    # ACTION: stack manipulation, not sure if python needs this (see grammar.y)
 
 def p_expr_list(p):
     '''expr_list : expr_list COMMA a_expr 
         | a_expr'''
     try:
-        p[0] = (p[1], p[3])
+        p[0] = [p[1], p[3]]
     except IndexError:
         p[0] = p[1]
-    # ACTION: stack manipulation, not sure if python needs this (see grammar.y)
 
 def p_error(p):
     print('Parsing error: "{0}" at line {1}'.format(p, p.lexer.lineno))
@@ -226,6 +199,52 @@ def p_error(p):
 import ply.yacc as yacc
 p = yacc.yacc()
 
+# ((('int', 'a'), ';', (':=', 'a', ('+', '1', '1'))), ';', ('write', 'a')
+
+env = {}
+stack = []
+# Action code executed here
+def run(p):
+    global env, stack
+
+    if type(p) == list:
+        if p[0] == 'int':
+            env[p[1]] = int(0)
+            p.pop(0)
+            return run(p)
+        if p[0] == 'float':
+            env[p[1]] = float(0)
+            return p
+        if p[0] == ':=':
+            env[p[1]] = run(p[2])
+            print('variable {0} has value {1}'.format(p[1], env[p[1]]))
+        elif p[0] == '*':
+            return run(p[1]) * run(p[2])
+        elif p[0] == '/':
+            return run(p[1]) / run(p[2])
+        elif p[0] == '+':
+            return run(p[1]) + run(p[2])
+        elif p[0] == '-':
+            return run(p[1]) - run(p[2])
+        elif p[0] == 'NEGATIVE':
+            return run(p[1]) * -1
+    else:
+        return p
+
+
+
+
+    #     elif p[0] == 'write':
+    #     if run(p[1]) in env:
+    #         stack.insert(0, (run(p[1]), env[run(p[1])]))
+    #         return 'Wrote {} to stack'.format(env[run(p[1])])
+    #     else:
+    #         stack.insert(0, run(p[1]))
+    # elif p[0] == 'read':
+    #     if run(p[1]) in stack:
+    #         return '{}'.format(stack[run(p[1])])
+    #     else:
+    #         return 'Variable not in stack.'
 
 # ---------------------------------------------
 # Run parser
@@ -233,3 +252,4 @@ p = yacc.yacc()
 
 prgm = open('inputs-{0}/{1}.smp'.format(input('Type: '), input('File: ')), 'r').read()
 p.parse(prgm, l)
+print('Declaration environment: {0}\nStack: {1}'.format(env, stack))
