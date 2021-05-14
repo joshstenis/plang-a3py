@@ -91,6 +91,7 @@ stack = []
 
 # Evaluates a_expr then returns result (i.e. calculator)
 def evalExpr(e):
+    global env
     if type(e) is list:
         if e[0] == 'NEGATIVE':
             return evalExpr(e[1]) * -1
@@ -146,14 +147,15 @@ def p_assignment(p):
 
 def p_declaration(p):
     '''declaration : datatype ID'''
-    if p[1] == 'DT_INT':
+    if p[1] == 'int':
         env[p[2]] = int(0)
-    elif p[1] == 'DT_FLOAT':
+    elif p[1] == 'float':
         env[p[2]] = float(0)
 
 def p_datatype(p):
     '''datatype : DT_INT 
         | DT_FLOAT'''
+    p[0] = p[1]
 
 def p_a_expr(p):
     '''a_expr :  a_expr a_op a_expr
