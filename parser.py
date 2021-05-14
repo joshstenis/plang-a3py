@@ -114,7 +114,7 @@ import re
 def p_program(p):
     '''program : stmt_list SEMICOLON'''
     print('\n{}'.format(p[1]))
-    # run(p[1])      # run(p[1])
+    run(p[1])      # run(p[1])
 
 def p_stmt_list(p):
     '''stmt_list : stmt_list SEMICOLON stmt 
@@ -210,7 +210,6 @@ def run(p):
     if type(p) == list:
         if p[0] == 'int':
             env[p[1]] = int(0)
-            p.pop(0)
             return run(p)
         if p[0] == 'float':
             env[p[1]] = float(0)
@@ -229,7 +228,7 @@ def run(p):
         elif p[0] == 'NEGATIVE':
             return run(p[1]) * -1
     else:
-        return p
+        pass
 
 
 
