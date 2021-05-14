@@ -207,28 +207,7 @@ stack = []
 def run(p):
     global env, stack
 
-    if type(p) == list:
-        if p[0] == 'int':
-            env[p[1]] = int(0)
-            return run(p)
-        if p[0] == 'float':
-            env[p[1]] = float(0)
-            return p
-        if p[0] == ':=':
-            env[p[1]] = run(p[2])
-            print('variable {0} has value {1}'.format(p[1], env[p[1]]))
-        elif p[0] == '*':
-            return run(p[1]) * run(p[2])
-        elif p[0] == '/':
-            return run(p[1]) / run(p[2])
-        elif p[0] == '+':
-            return run(p[1]) + run(p[2])
-        elif p[0] == '-':
-            return run(p[1]) - run(p[2])
-        elif p[0] == 'NEGATIVE':
-            return run(p[1]) * -1
-    else:
-        pass
+    
 
 
 
