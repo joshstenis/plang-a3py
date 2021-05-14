@@ -89,9 +89,6 @@ precedences = (
 env = {}
 stack = []
 
-
-
-
 def p_program(p):
     '''program : stmt_list SEMICOLON'''
 
@@ -175,6 +172,45 @@ def p_error(p):
 
 import ply.yacc as yacc
 p = yacc.yacc()
+
+# Evaluates a_expr then returns result (i.e. calculator)
+def evalExpr(e):
+    global env
+    if type(e) is list:
+        if e[0] == 'NEGATIVE':
+            return evalExpr(e[1]) * -1
+        elif e[0] == '*':
+            return evalExpr(e[1]) * evalExpr(e[2])
+        elif e[0] == '/':
+            return evalExpr(e[1]) / evalExpr(e[2])
+        elif e[0] == '+':
+            return evalExpr(e[1]) + evalExpr(e[2])
+        elif e[0] == '-':
+            return evalExpr(e[1]) - evalExpr(e[2])
+    else:
+        if type(e) is str:
+            return env[e]
+        else:
+            return e
+
+# Traverses next lists (expr_list and varlist)
+# NOTE: Specifically for READ and WRITE
+def stackReadWrite(l, op):
+    if op == 'w':
+        if type(l) is list:
+            stackReadWrite(l[0], op)
+            stackReadWrite(l[1], op)
+        else:
+            stack.append(l)
+    if op == 'r':
+        if type(l) is list:
+            stackReadWrite(l[0], op)
+            stackReadWrite(l[1], op)
+        else:
+            if l in stack:
+                print('Read \'{}\''.format(l))
+            else:
+                print('Var \'{}\' not in stack.'.format(l))
 
 
 # ---------------------------------------------
