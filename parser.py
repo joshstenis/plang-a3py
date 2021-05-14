@@ -111,10 +111,23 @@ l = lex.lex()
 
 import re
 
+# Yields lines one at a time for runLine to properly engage action code
+def run(tree):
+    line = []
+    print(tree)
+
+    for i in tree:
+        if type(i) is not list:
+            print(line)
+            action(line[0])
+            line.clear()
+        else:
+            line.append(i)
+
 def p_program(p):
     '''program : stmt_list SEMICOLON'''
-    print('\n{}'.format(p[1]))
-    run(p[1])      # run(p[1])
+    # print('\n{}'.format(p[1]))
+    run(p[1])
 
 def p_stmt_list(p):
     '''stmt_list : stmt_list SEMICOLON stmt 
@@ -204,10 +217,26 @@ p = yacc.yacc()
 env = {}
 stack = []
 # Action code executed here
-def run(p):
+def action(p):
     global env, stack
 
-    
+    if type(p) is list:
+        if p[0] == 'int':
+            env[p[1]] = int(0)
+            print(p)
+        if p[0] == ':=':
+            env[p[1]] = action(p[2])
+            print('{0} assigned to {1}'.format(env[p[1]], p[1]))
+        if p[0] == '*':
+            return action(p[1]) * action(p[2])
+        elif p[0] == '/':
+            return action(p[1]) / action(p[2])
+        elif p[0] == '+':
+            return action(p[1]) + action(p[2])
+        elif p[0] == '-':
+            return action(p[1]) - action(p[2])
+    else:
+        return p
 
 
 
